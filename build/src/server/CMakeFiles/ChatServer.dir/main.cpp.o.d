@@ -222,6 +222,10 @@ src/server/CMakeFiles/ChatServer.dir/main.cpp.o: \
  /usr/include/c++/8/chrono /usr/include/c++/8/ratio \
  /usr/include/c++/8/ctime /usr/include/c++/8/bits/parse_numbers.h \
  /usr/include/c++/8/bits/std_mutex.h \
+ /WorkSpace/chatServer/include/server/redis/redis.hpp \
+ /usr/local/include/hiredis/hiredis.h /usr/local/include/hiredis/read.h \
+ /usr/include/sys/time.h /usr/local/include/hiredis/sds.h \
+ /usr/local/include/hiredis/alloc.h /usr/include/c++/8/thread \
  /WorkSpace/chatServer/include/server/model/friendmodel.hpp \
  /WorkSpace/chatServer/include/server/model/user.hpp \
  /WorkSpace/chatServer/include/server/model/offlinemessagemodel.hpp \

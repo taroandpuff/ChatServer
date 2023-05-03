@@ -26,6 +26,12 @@ ChatService::ChatService() {
     _msgHandlerMap.insert({CREATE_GROUP_MSG, std::bind(&ChatService::createGroup, this, _1, _2, _3)});
     _msgHandlerMap.insert({ADD_GROUP_MSG, std::bind(&ChatService::addGroup, this, _1, _2, _3)}); 
     _msgHandlerMap.insert({GROUP_CHAT_MSG, std::bind(&ChatService::groupChat, this, _1, _2, _3)});
+
+    // 连接redis服务器
+    if (_redis.connect()) {
+        // 设置上报消息的回调
+        _redis.init_notify_handler(std::bind(&ChatService::handlerRedisSubscribeMessage, this, _1, _2));
+    }
 }
 
 // 获取消息对应的处理器
@@ -60,6 +66,9 @@ void ChatService::login(const TcpConnectionPtr& conn, json& js, Timestamp time) 
                 lock_guard<mutex> lock(_connMutex);
                 _userConnMap.insert({id, conn});
             }
+
+            // id用户登录成功后, 向redis订阅
+            _redis.subscribe(id);
             // 登录成功, 更新用户状态信息, online
             user.setState("online");
             _userModel.updateState(user);
@@ -135,6 +144,10 @@ void ChatService::loginout(const TcpConnectionPtr &conn, json &js, Timestamp tim
             _userConnMap.erase(it);
         }
     }
+    // 用户注销, 相当于就是下线, 在redis中取消订阅通道
+    _redis.unsubscribe(userid);
+
+    // 更新用户状态信息
     User user(userid, "", "", "offline");
     _userModel.updateState(user);
 }
@@ -178,6 +191,9 @@ void ChatService::clientCloseException(const TcpConnectionPtr& conn) {
             }
         }
     }
+    // redis中取消订阅
+    _redis.unsubscribe(user.getId());
+
     if (user.getId() != -1) {
         // 更新用户的状态信息
         user.setState("offline");
@@ -197,6 +213,15 @@ void ChatService::oneChat(const TcpConnectionPtr &conn, json &js, Timestamp time
             return; 
         }
     }
+
+    // 查询toid是否在线
+    User user = _userModel.query(toid);
+    // 在其它服务器上,则发送
+    if (user.getState() == "online") {
+        _redis.publish(toid, js.dump());
+        return;
+    }
+
     // toid 不在线,存储离线消息
     _offlineMsgModel.insert(toid, js.dump());
 }
@@ -249,8 +274,27 @@ void ChatService::groupChat(const TcpConnectionPtr &conn, json &js, Timestamp ti
             if (it != _userConnMap.end()) {
                 it->second->send(js.dump());
             } else {
-                _offlineMsgModel.insert(id, js.dump());
+                // 查询toid是否在线
+                User user = _userModel.query(id);
+                if (user.getState() == "online") {
+                    _redis.publish(id, js.dump());
+                } else {
+                    _offlineMsgModel.insert(id, js.dump());
+                }
             }
         }
+    }
+}
+
+void ChatService::handlerRedisSubscribeMessage(int userid, string msg) {
+    json js = json::parse(msg.c_str());
+    {
+        auto it = _userConnMap.find(userid);
+        if (it != _userConnMap.end()) {
+            it->second->send(msg);
+            return;
+        }
+        // 存储离线消息
+        _offlineMsgModel.insert(userid, msg);
     }
 }

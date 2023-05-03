@@ -9,6 +9,7 @@ using namespace std;
 using namespace muduo;
 using namespace muduo::net;
 
+#include "redis.hpp"
 #include "friendmodel.hpp"
 #include "offlinemessagemodel.hpp"
 #include "UserModel.hpp"
@@ -47,6 +48,8 @@ public:
     void addGroup(const TcpConnectionPtr &conn, json &js, Timestamp time);
     // 群组聊天业务
     void groupChat(const TcpConnectionPtr &conn, json &js, Timestamp time);
+    // redis上报消息
+    void handlerRedisSubscribeMessage(int, string);
 private:
     ChatService();
 
@@ -58,6 +61,9 @@ private:
     OfflineMsgModel _offlineMsgModel;
     FriendModel _friendModel;
     GroupModel _groupModel;
+
+    // redis操作对象
+    Redis _redis; 
 
     // 定义互斥锁, 保证_userConnMap线程安全
     mutex _connMutex;
