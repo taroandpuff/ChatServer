@@ -73,15 +73,15 @@ src/client/CMakeFiles/ChatClient.dir/main.cpp.o: src/client/CMakeFiles/ChatClien
 src/client/CMakeFiles/ChatClient.dir/main.cpp.o: ../src/client/main.cpp
 src/client/CMakeFiles/ChatClient.dir/main.cpp.o: src/client/CMakeFiles/ChatClient.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/WorkSpace/chatServer/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object src/client/CMakeFiles/ChatClient.dir/main.cpp.o"
-	cd /WorkSpace/chatServer/build/src/client && /usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/client/CMakeFiles/ChatClient.dir/main.cpp.o -MF CMakeFiles/ChatClient.dir/main.cpp.o.d -o CMakeFiles/ChatClient.dir/main.cpp.o -c /WorkSpace/chatServer/src/client/main.cpp
+	cd /WorkSpace/chatServer/build/src/client && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT src/client/CMakeFiles/ChatClient.dir/main.cpp.o -MF CMakeFiles/ChatClient.dir/main.cpp.o.d -o CMakeFiles/ChatClient.dir/main.cpp.o -c /WorkSpace/chatServer/src/client/main.cpp
 
 src/client/CMakeFiles/ChatClient.dir/main.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/ChatClient.dir/main.cpp.i"
-	cd /WorkSpace/chatServer/build/src/client && /usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /WorkSpace/chatServer/src/client/main.cpp > CMakeFiles/ChatClient.dir/main.cpp.i
+	cd /WorkSpace/chatServer/build/src/client && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /WorkSpace/chatServer/src/client/main.cpp > CMakeFiles/ChatClient.dir/main.cpp.i
 
 src/client/CMakeFiles/ChatClient.dir/main.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/ChatClient.dir/main.cpp.s"
-	cd /WorkSpace/chatServer/build/src/client && /usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /WorkSpace/chatServer/src/client/main.cpp -o CMakeFiles/ChatClient.dir/main.cpp.s
+	cd /WorkSpace/chatServer/build/src/client && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /WorkSpace/chatServer/src/client/main.cpp -o CMakeFiles/ChatClient.dir/main.cpp.s
 
 # Object files for target ChatClient
 ChatClient_OBJECTS = \
